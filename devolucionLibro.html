@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <h1>Formulario de Devolución de Libro</h1>
+        <form id="devolucionForm">
+            <label for="prestamo_id">ID de Préstamo:</label>
+            <input type="text" id="prestamo_id" name="prestamo_id" required>
+            <br>
+            <button type="submit">Devolver Libro</button>
+        </form>
+        
+        <div id="resultado">
+            <!-- Aquí se mostrará el resultado de la devolución -->
+        </div>
+    
+    
+</body>
+
+<script>
+    document.getElementById("devolucionForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+
+        fetch("php/procesar_devulucion.php", {
+            method: "POST",
+            body: formData,
+        })
+            .then(response => response.text()) // Cambiado a text()
+            .then(data => {
+                document.getElementById("resultado").textContent = data;
+            })
+            .catch(error => {
+                console.error("Error en la solicitud: " + error);
+            });
+    });
+</script>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuarios</title>
+    <link rel="stylesheet" type="text/css" href="styles/registrarUsuario.css">
+</head>
+
+<body>
+    <section class="registrarusurio">
+        <h1>Registro de Usuarios</h1>
+        <form id="registroForm" action="php/registrarUsuario.php" method="post">
+            <label for="cedula">Cédula:</label>
+            <input type="text" name="cedula" id="cedula" required><br>
+
+            <label for="primerNombre">Primer Nombre:</label>
+            <input type="text" name="primerNombre" id="primerNombre" required><br>
+
+            <label for="segundoNombre">Segundo Nombre:</label>
+            <input type="text" name="segundoNombre" id="segundoNombre"><br>
+
+            <label for="primerApellido">Primer Apellido:</label>
+            <input type="text" name="primerApellido" id="primerApellido" required><br>
+
+            <label for="segundoApellido">Segundo Apellido:</label>
+            <input type="text" name="segundoApellido" id="segundoApellido"><br>
+
+            <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+            <input type="date" name="fechaNacimiento" id="fechaNacimiento" required><br>
+
+            <label for="departamento">Departamento:</label>
+            <select name="departamento" id="departamento" required>
+                <option value="1">Leticia</option>
+            </select><br>
+
+            <label for="ciudad">Ciudad:</label>
+            <select name="ciudad" id="ciudad" required>
+                <option value="1">Leticia</option>
+            </select><br>
+
+            <label for="calle">Calle:</label>
+            <input type="text" name="calle" id="calle" required><br>
+
+            <label for="numeroCasa">Número de Casa:</label>
+            <input type="text" name="numeroCasa" id="numeroCasa" required><br>
+
+            <label for="barrio">Barrio:</label>
+            <input type="text" name="barrio" id="barrio" required><br>
+
+            <label for="numeroTelefono">Número de Teléfono:</label>
+            <input type="text" name="numeroTelefono" id="numeroTelefono" required><br>
+
+            <label for="correo">Correo Electrónico:</label>
+            <input type="email" name="correo" id="correo" required><br>
+
+            <input type="submit" value="Registrar">
+        </form>
+    </section>
+
+    <script src="validaciones.js"></script>
+</body>
+
+</html>

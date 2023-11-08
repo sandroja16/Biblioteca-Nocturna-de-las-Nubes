@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+    <link rel="stylesheet" type="text/css" href="styles/registro_prestamo.css">
+ 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jspdf.min.js"></script>
+    <title>Biblioteca Nocturna de las Nubest</title>
+</head>
+
+<body>
+    <header>
+        <h1>Biblioteca Nocturna de las Nubes</h1>
+        <nav class="menu">
+            <ul>
+                <li>Usuarios</li>
+                <li>Libros</li>
+                <li>Prestamos</li>
+                <li>Autores</li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="cards">
+            <div class="card">
+                <img src="assets/inicioRegistro/cliente.jpg" alt="Registrar Cliente">
+                <h2>Registrar Cliente</h2>
+                <button class="btn" onclick="location.href='registro_cliente.html'">Registrar</button>
+            </div>
+            <div class="card">
+                <img src="assets/inicioRegistro/autor.jpg" alt="Registrar Autor">
+                <h2>Registrar Autor</h2>
+                <button class="btn" onclick="location.href='registro_autor.html'">Registrar</button>
+            </div>
+            <div class="card">
+                <img src="assets/inicioRegistro/Libro.jpg" alt="Registrar Libro">
+                <h2>Registrar Libro</h2>
+                <button class="btn" onclick="location.href='registro_libro.html'">Registrar</button>
+            </div>
+            <div class="card">
+                <img src="assets/inicioRegistro/prestamo.jpg" alt="Registrar Prestamo">
+                <h2>Registrar Prestamo</h2>
+                <button class="btn" onclick="location.href='registro_prestamo.html'">Registrar</button>
+            </div>
+            <div class="card">
+                <img src="assets/inicioRegistro/prestamo.jpg" alt="Registrar Prestamo">
+                <h2>Devulucion de Prestamo</h2>
+                <button class="btn" onclick="location.href='devolucionLibro.html'">Registrar</button>
+            </div>
+        </div>
+    </div>
+    <section id="procesarPrestamo">
+        <div id="sectionprestamoForm">
+            <form id="prestamoForm">
+                <label for="copia_id">Copia ID:</label>
+                <input type="number" name="copia_id" required><br>
+    
+                <label for="cedula">Usuario ID:</label>
+                <input type="text" name="cedula" required><br>
+    
+                <input type="submit" value="Realizar Préstamo">
+            </form>
+        </div>
+        <div id="resultado"></div>
+    </section>
+</body>
+    
+<script>
+    //procesar prestamo
+    document.getElementById("prestamoForm").addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+        const copiaId = document.querySelector("input[name='copia_id']").value;
+        const cedula = document.querySelector("input[name='cedula']").value;
+        // alert (cedula );
+        // alert (copiaId);
+        fetch('php/procesar_prestamoPaquete.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `copia_id=${copiaId}&cedula=${cedula}`
+        })
+            .then(response => response.text())
+            .then(data => {
+
+                document.getElementById("resultado").innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+
+</script>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/registro_prestamo.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <section id="prestamo">
+        <div id="sectionprestamoForm">
+            <form id="prestamoForm">
+                <label for="copia_id">Copia ID:</label>
+                <input type="number" name="copia_id" required><br>
+
+                <label for="cedula">Usuario ID:</label>
+                <input type="text" name="cedula" required><br>
+
+                <input type="submit" value="Realizar Préstamo">
+            </form>
+        </div>
+        <div id="resultado"></div>
+    </section>
+
+</body>
+<script>
+    //procesar prestamo
+    document.getElementById("prestamoForm").addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+        const copiaId = document.querySelector("input[name='copia_id']").value;
+        const cedula = document.querySelector("input[name='cedula']").value;
+        // alert (cedula );
+        // alert (copiaId);
+        fetch('php/procesar_prestamo.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `copia_id=${copiaId}&cedula=${cedula}`
+        })
+            .then(response => response.text())
+            .then(data => {
+
+                document.getElementById("resultado").innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+    //imprimir resivo
+
+    function imprimirRecibo() {
+        var doc = new jsPDF();
+        doc.addHTML(document.getElementById('factura'), function () {
+            doc.autoPrint();
+            doc.save('factura.pdf');
+        });
+    }
+</script>
+
+
+</body>
+
+</html>
