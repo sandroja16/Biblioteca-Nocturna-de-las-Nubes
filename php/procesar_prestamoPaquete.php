@@ -9,59 +9,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Realizar el préstamo utilizando el procedimiento
     $prestamo_id = uniqid(); // Generar un ID de préstamo único
-    $fecha_prestamo = date('Y-m-d'); // Fecha actual
-    $fecha_devolucion = date('Y-m-d', strtotime($fecha_prestamo . ' +8 days')); // Fecha de entrega
-    $resultado_prestamo = '';
+    $fecha_prestamo = date('Y-m-d'); // Fecha actual formateada como YYYY-MM-DD
     $mensaje = '';
 
     // Llamar al procedimiento PRC_REALIZAR_PRESTAMO
-    $stmt = oci_parse($conexion, "BEGIN MIBIBLIOTECA.PRC_REALIZAR_PRESTAMO(:prestamo_id, TO_DATE(:fecha_prestamo, 'YYYY-MM-DD'), :cedula, :copia_id); END;");
-    oci_bind_by_name($stmt, ':prestamo_id', $prestamo_id);
+    $stmt = oci_parse($conexion, "BEGIN MIBIBLIOTECA.PRC_REALIZAR_PRESTAMO(:prestamo_id, TO_DATE(:fecha_prestamo, 'YYYY-MM-DD'), :cedula, :copia_id, :mensaje); END;");
+    oci_bind_by_name($stmt, ':prestamo_id', $prestamo_id, 32); // Suponiendo que PrestamoID es un VARCHAR2(32)
     oci_bind_by_name($stmt, ':fecha_prestamo', $fecha_prestamo);
-     oci_bind_by_name($stmt, ':cedula', $cedula);
+    oci_bind_by_name($stmt, ':cedula', $cedula);
     oci_bind_by_name($stmt, ':copia_id', $copia_id);
+    oci_bind_by_name($stmt, ':mensaje', $mensaje, 200);
 
     oci_execute($stmt);
-    
-    // Obtener el resultado del procedimiento
+
+    // Cerrar el cursor
     oci_free_statement($stmt);
 
     // Comprobar si se completó el préstamo
-    if ($resultado_prestamo == 'EXITOSO') {
+    if ($mensaje == 'EXITOSO') {
         // Obtener información de la factura utilizando la función FN_OBTENER_FACTURA
         $stmt = oci_parse($conexion, "BEGIN :result := MIBIBLIOTECA.FN_OBTENER_FACTURA(:prestamo_id); END;");
-        oci_bind_by_name($stmt, ':result', $cursor, -1, OCI_B_CURSOR);
+        oci_bind_by_name($stmt, ':result', $factura_json, 2000);
         oci_bind_by_name($stmt, ':prestamo_id', $prestamo_id);
-
         oci_execute($stmt);
-        
-        // Obtener los datos de la factura
-        oci_fetch_all($cursor, $factura, null, null, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
-        
-        // Cerrar el cursor y el procedimiento
+
+        // Cerrar el procedimiento
         oci_free_statement($stmt);
+
+        // Mostrar la factura en JSON
+        echo $factura_json;
         
-        // Mostrar la factura en HTML
-        echo '<div id="factura">';
-        echo '<div class="encabezado">Biblioteca Nocturna de las Nubes</div>';
-        echo '<div class="detalle">Referencia de préstamo: ' . $factura[0]['REFERENCIA_PRESTAMO'] . '</div>';
-        echo '<div class="detalle">Fecha del préstamo: ' . $factura[0]['FECHA_PRESTAMO'] . '</div>';
-        echo '<div class="detalle">Fecha de entrega: ' . $factura[0]['FECHA_ENTREGA'] . '</div>';
-        echo '<div class="detalle nombre-libro">Libro prestado: ' . $factura[0]['LIBRO_PRESTADO'] . '</div>';
-        echo '<div class="detalle">Autor: ' . $factura[0]['AUTOR_LIBRO'] . '</div>';
-        echo '<div class="detalle">Lector: ' . $factura[0]['NOMBRE_LECTOR'] . '</div>';
-        echo '<div class="detalle">Cedula: ' . $factura[0]['CEDULA_LECTOR'] . '</div>';
-        echo '<div class="pie-pagina">Gracias por su préstamo</div>';
-        echo '<br>';
-        echo '<button id="boton-imprimir"  onclick="imprimirRecibo()" >Imprimir factura</button>';
-        echo '<br>';
-        echo '</div>';
     } else {
         // Mostrar el mensaje de error
-        echo 'No se puede realizar el préstamo: ' . $mensaje;
+       // echo json_encode(['error' => $mensaje]);
+        echo  'No se puede realizar el préstamo :'.$mensaje;
     }
 } else {
-    echo 'Método de solicitud no válido.';
+    echo json_encode(['error' => 'Método de solicitud no válido.']);
 }
-
 ?>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles/index.css">
     <link rel="stylesheet" type="text/css" href="styles/registro_prestamo.css">
- 
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="jspdf.min.js"></script>
     <title>Biblioteca Nocturna de las Nubest</title>
@@ -58,45 +58,76 @@
             <form id="prestamoForm">
                 <label for="copia_id">Copia ID:</label>
                 <input type="number" name="copia_id" required><br>
-    
+
                 <label for="cedula">Usuario ID:</label>
                 <input type="text" name="cedula" required><br>
-    
+
                 <input type="submit" value="Realizar Préstamo">
             </form>
         </div>
         <div id="resultado"></div>
     </section>
 </body>
-    
+
 <script>
-    //procesar prestamo
-    document.getElementById("prestamoForm").addEventListener("submit", function (e) {
+document.getElementById("prestamoForm").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-        e.preventDefault();
+    const copiaId = document.querySelector("input[name='copia_id']").value;
+    const cedula = document.querySelector("input[name='cedula']").value;
 
-        const copiaId = document.querySelector("input[name='copia_id']").value;
-        const cedula = document.querySelector("input[name='cedula']").value;
-        // alert (cedula );
-        // alert (copiaId);
-        fetch('php/procesar_prestamoPaquete.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `copia_id=${copiaId}&cedula=${cedula}`
-        })
-            .then(response => response.text())
-            .then(data => {
-
-                document.getElementById("resultado").innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    fetch('php/procesar_prestamoPaquete.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `copia_id=${copiaId}&cedula=${cedula}`
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.text(); // Leer como texto
+    })
+    .then(data => {
+        try {
+            // Intentar parsear la cadena JSON
+            const jsonData = JSON.parse(data);
+            
+            // Verificar si el parsing fue exitoso
+            if (typeof jsonData === 'object') {
+                // Si la respuesta es un objeto JSON, es un préstamo exitoso
+                const facturaHTML = `
+                    <div id="factura">
+                        <div class="encabezado">Biblioteca Nocturna de las Nubes</div>
+                        <div class="detalle">Referencia de préstamo: ${jsonData.referencia_prestamo}</div>
+                        <div class="detalle">Fecha de préstamo: ${jsonData.fecha_prestamo}</div>
+                        <div class="detalle">Fecha de entrega: ${jsonData.fecha_entrega}</div>
+                        <div class="detalle">Libro prestado: ${jsonData.libro_prestado}</div>
+                        <div class="detalle">Autor del libro: ${jsonData.autor_libro}</div>
+                        <div class="detalle">Nombre del lector: ${jsonData.nombre_lector}</div>
+                        <div class="detalle">Cédula del lector: ${jsonData.cedula_lector}</div>
+                        <div class="pie-pagina">Gracias por su préstamo</div>
+                        <br>
+                        <button id="boton-imprimir" onclick="imprimirRecibo()">Imprimir factura</button>
+                        <br>
+                    </div>`;
+                // Agregar el HTML de la factura al elemento con ID "resultado"
+                document.getElementById("resultado").innerHTML = facturaHTML;
+            } else {
+                // Si no es un objeto JSON, mostrar un alert con la cadena
+                alert(data);
+            }
+        } catch (error) {
+            // Si hay un error al parsear la cadena JSON, mostrar un alert con el error
+            alert('Error al analizar la respuesta JSON: ' + error.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error en la solicitud' + error.message);
     });
-
-
+});
 </script>
 
 </html>
