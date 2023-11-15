@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Lectores</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <h1>Listado de Lectores</h1>
+
+    <label for="busqueda">Buscar en todos los campos:</label>
+    <input type="text" id="busqueda">
+
+    <table id="tablaResultados">
+        <thead>
+            <tr>
+                <th>Cédula</th>
+                <th>Primer Nombre</th>
+                <th>Segundo Nombre</th>
+                <th>Primer Apellido</th>
+                <th>Segundo Apellido</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Departamento ID</th>
+                <th>Ciudad ID</th>
+                <th>Calle</th>
+                <th>Número de Casa</th>
+                <th>Barrio</th>
+                <th>Número de Teléfono</th>
+                <th>Correo</th>
+                <!-- Puedes agregar más encabezados según tus columnas -->
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla">
+            <!-- Aquí se mostrarán los resultados -->
+        </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function () {
+            $('#busqueda').on('input', function () {
+                const searchTerm = $(this).val();
+                $.post('php/Listalectores_PKG.php', { busqueda: searchTerm }, function (data) {
+                    mostrarResultados(data);
+                });
+            });
+        });
+
+        function mostrarResultados(data) {
+            const tabla = $('#cuerpoTabla');
+            tabla.empty(); // Limpiar la tabla antes de agregar nuevos datos
+
+            // Iterar sobre los resultados y mostrarlos en la tabla
+            $.each(data, function (index, item) {
+                console.log(data);
+                tabla.append(
+                    `<tr>
+            <td>${item.Cedula}</td>
+            <td>${item.PrimerNombre}</td>
+            <td>${item.SegundoNombre}</td>
+            <td>${item.PrimerApellido}</td>
+            <td>${item.SegundoApellido}</td>
+            <td>${item.FechaNacimiento}</td>
+            <td>${item.DepartamentoID}</td>
+            <td>${item.CiudadID}</td>
+            <td>${item.Calle}</td>
+            <td>${item.NumeroCasa}</td>
+            <td>${item.Barrio}</td>
+            <td>${item.NumeroTelefono}</td>
+            <td>${item.Correo}</td>
+            <!-- Agrega aquí más celdas según tus columnas -->
+          </tr>`
+                );
+            });
+        }
+    </script>
+</body>
+
+</html>

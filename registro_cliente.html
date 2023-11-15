@@ -4,62 +4,613 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Usuarios</title>
-    <link rel="stylesheet" type="text/css" href="styles/registrarUsuario.css">
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+    <link rel="stylesheet" type="text/css" href="styles/registrarLector.css">
+    <title>Registro de Lectores</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
 </head>
 
 <body>
-    <section class="registrarusurio">
-        <h1>Registro de Usuarios</h1>
-        <form id="registroForm" action="php/registrarUsuario.php" method="post">
-            <label for="cedula">Cédula:</label>
-            <input type="text" name="cedula" id="cedula" required><br>
+    <header>
+        <a href="index.html"><h1>Biblioteca Nocturna de las Nubes</h1></a>
+        <nav class="menu">
+            <ul>
+                <li>Usuarios</li>
+                <li>Libros</li>
+                <li>Prestamos</li>
+                <li>Autores</li>
+            </ul>
+        </nav>
+    </header>
+    <div id="contenedorRegistar">
+        <section class="registrarLector">
+            <h1>Registro de Lectores</h1>
+            <form id="registroForm">
+                <label for="cedula">Cédula:</label>
+                <input type="text" name="cedula" id="cedula" required><br>
 
-            <label for="primerNombre">Primer Nombre:</label>
-            <input type="text" name="primerNombre" id="primerNombre" required><br>
+                <label for="primerNombre">Primer Nombre:</label>
+                <input type="text" name="primerNombre" id="primerNombre" required><br>
 
-            <label for="segundoNombre">Segundo Nombre:</label>
-            <input type="text" name="segundoNombre" id="segundoNombre"><br>
+                <label for="segundoNombre">Segundo Nombre:</label>
+                <input type="text" name="segundoNombre" id="segundoNombre"><br>
 
-            <label for="primerApellido">Primer Apellido:</label>
-            <input type="text" name="primerApellido" id="primerApellido" required><br>
+                <label for="primerApellido">Primer Apellido:</label>
+                <input type="text" name="primerApellido" id="primerApellido" required><br>
 
-            <label for="segundoApellido">Segundo Apellido:</label>
-            <input type="text" name="segundoApellido" id="segundoApellido"><br>
+                <label for="segundoApellido">Segundo Apellido:</label>
+                <input type="text" name="segundoApellido" id="segundoApellido"><br>
 
-            <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-            <input type="date" name="fechaNacimiento" id="fechaNacimiento" required><br>
+                <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                <input type="date" name="fechaNacimiento" id="fechaNacimiento" required><br>
 
-            <label for="departamento">Departamento:</label>
-            <select name="departamento" id="departamento" required>
-                <option value="1">Leticia</option>
-            </select><br>
+                <label for="departamento">Departamento:</label>
+                <select name="departamento" id="departamento" onchange="cargarCiudades()" required>
+                    <option value="">Selecciona un departamento</option>
+                </select><br>
 
-            <label for="ciudad">Ciudad:</label>
-            <select name="ciudad" id="ciudad" required>
-                <option value="1">Leticia</option>
-            </select><br>
+                <label for="ciudad">Ciudad:</label>
+                <select name="ciudad" id="ciudad" required>
+                    <option value="">Selecciona una ciudad</option>
+                    <!-- Opciones generadas dinámicamente dependiendo del departamento seleccionado -->
+                </select><br>
+                <label for="calle">Calle:</label>
+                <input type="text" name="calle" id="calle" required><br>
 
-            <label for="calle">Calle:</label>
-            <input type="text" name="calle" id="calle" required><br>
+                <label for="numeroCasa">Número de Casa:</label>
+                <input type="text" name="numeroCasa" id="numeroCasa" required><br>
 
-            <label for="numeroCasa">Número de Casa:</label>
-            <input type="text" name="numeroCasa" id="numeroCasa" required><br>
+                <label for="barrio">Barrio:</label>
+                <input type="text" name="barrio" id="barrio" required><br>
 
-            <label for="barrio">Barrio:</label>
-            <input type="text" name="barrio" id="barrio" required><br>
+                <label for="numeroTelefono">Número de Teléfono:</label>
+                <input type="text" name="numeroTelefono" id="numeroTelefono" required><br>
 
-            <label for="numeroTelefono">Número de Teléfono:</label>
-            <input type="text" name="numeroTelefono" id="numeroTelefono" required><br>
+                <label for="correo">Correo Electrónico:</label>
+                <input type="email" name="correo" id="correo" required><br>
 
-            <label for="correo">Correo Electrónico:</label>
-            <input type="email" name="correo" id="correo" required><br>
+                <input type="submit" value="Registrar">
+                <button type="button" id="btnActualizar">Actualizar</button>
+                <button type="button" id="btnBuscar">Buscar</button>
+            </form>
+          
+        </section>
+        <section id="mitad2">
+            <img src="assets/inicioRegistro/cliente.jpg" alt="">
+        </section>
+    </div>
 
-            <input type="submit" value="Registrar">
-        </form>
-    </section>
 
-    <script src="validaciones.js"></script>
 </body>
+<script>
+    // Función para registrar Lector
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector("#registroForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            // Obtener los valores del formulario
+            var cedula = document.getElementById("cedula").value;
+            var primerNombre = document.getElementById("primerNombre").value;
+            var segundoNombre = document.getElementById("segundoNombre").value;
+            var primerApellido = document.getElementById("primerApellido").value;
+            var segundoApellido = document.getElementById("segundoApellido").value;
+            var fechaNacimiento = document.getElementById("fechaNacimiento").value;
+            var departamento = document.getElementById("departamento").value;
+            var ciudad = document.getElementById("ciudad").value;
+            var calle = document.getElementById("calle").value;
+            var numeroCasa = document.getElementById("numeroCasa").value;
+            var barrio = document.getElementById("barrio").value;
+            var numeroTelefono = document.getElementById("numeroTelefono").value;
+            var correo = document.getElementById("correo").value;
+
+            // Realizar la solicitud POST con jQuery
+            $.post("php/Registrar_lector_PKG.php", {
+                cedula: cedula,
+                primerNombre: primerNombre,
+                segundoNombre: segundoNombre,
+                primerApellido: primerApellido,
+                segundoApellido: segundoApellido,
+                fechaNacimiento: fechaNacimiento,
+                departamento: departamento,
+                ciudad: ciudad,
+                calle: calle,
+                numeroCasa: numeroCasa,
+                barrio: barrio,
+                numeroTelefono: numeroTelefono,
+                correo: correo
+            }, function (data) {
+                alert(data);
+                document.getElementById("registroForm").reset();
+            });
+        });
+    });
+
+    // Función para actualizar Lector
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("btnActualizar").addEventListener("click", function () {
+            event.preventDefault();
+
+            // Obtener los valores del formulario
+            var cedula = document.getElementById("cedula").value;
+            var primerNombre = document.getElementById("primerNombre").value;
+            var segundoNombre = document.getElementById("segundoNombre").value;
+            var primerApellido = document.getElementById("primerApellido").value;
+            var segundoApellido = document.getElementById("segundoApellido").value;
+            var fechaNacimiento = document.getElementById("fechaNacimiento").value;
+            var departamento = document.getElementById("departamento").value;
+            var ciudad = document.getElementById("ciudad").value;
+            var calle = document.getElementById("calle").value;
+            var numeroCasa = document.getElementById("numeroCasa").value;
+            var barrio = document.getElementById("barrio").value;
+            var numeroTelefono = document.getElementById("numeroTelefono").value;
+            var correo = document.getElementById("correo").value;
+
+            // Realizar la solicitud POST con jQuery
+            $.post("php/Actualizar_lector_PKG.php", {
+                cedula: cedula,
+                primerNombre: primerNombre,
+                segundoNombre: segundoNombre,
+                primerApellido: primerApellido,
+                segundoApellido: segundoApellido,
+                fechaNacimiento: fechaNacimiento,
+                departamento: departamento,
+                ciudad: ciudad,
+                calle: calle,
+                numeroCasa: numeroCasa,
+                barrio: barrio,
+                numeroTelefono: numeroTelefono,
+                correo: correo
+            }, function (data) {
+                alert(data);
+                document.getElementById("registroForm").reset();
+            });
+        });
+    });
+
+
+    // Función para busca por cedula y cargar fomulario si lo encuenta
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("btnBuscar").addEventListener("click", function () {
+            var cedulaBuscar = document.getElementById("cedula").value;
+            console.log("entro 1");
+            $.get("php/Buscar_lector.php", {
+                cedula: cedulaBuscar
+            }, function (data) {
+                console.log("entro 1");
+
+                console.log('reslt: ' + data);
+
+                fillFormWithData(data);
+            });
+        });
+
+        function fillFormWithData(data) {
+            var lector = JSON.parse(data);
+
+            document.getElementById("primerNombre").value = lector.PrimerNombre;
+            document.getElementById("segundoNombre").value = lector.SegundoNombre;
+            document.getElementById("primerApellido").value = lector.PrimerApellido;
+            document.getElementById("segundoApellido").value = lector.SegundoApellido;
+            document.getElementById("fechaNacimiento").value = lector.FechaNacimiento;
+            document.getElementById("departamento").value = lector.DepartamentoID;
+            document.getElementById("ciudad").value = lector.CiudadID;
+            document.getElementById("calle").value = lector.Calle;
+            document.getElementById("numeroCasa").value = lector.NumeroCasa;
+            document.getElementById("barrio").value = lector.Barrio;
+            document.getElementById("numeroTelefono").value = lector.NumeroTelefono;
+            document.getElementById("correo").value = lector.Correo;
+        }
+    });
+
+    // Función para cargar todos los departamentos al cargar la página
+    const departamentos = [
+        { id: 1, nombre: 'Amazonas' },
+        { id: 2, nombre: 'Antioquia' },
+        { id: 3, nombre: 'Arauca' },
+        { id: 4, nombre: 'Atlántico' },
+        { id: 5, nombre: 'Bolívar' },
+        { id: 6, nombre: 'Boyacá' },
+        { id: 7, nombre: 'Caldas' },
+        { id: 8, nombre: 'Caquetá' },
+        { id: 9, nombre: 'Casanare' },
+        { id: 10, nombre: 'Cauca' },
+        { id: 11, nombre: 'Cesar' },
+        { id: 12, nombre: 'Chocó' },
+        { id: 13, nombre: 'Córdoba' },
+        { id: 14, nombre: 'Cundinamarca' },
+        { id: 15, nombre: 'Guainía' },
+        { id: 16, nombre: 'Guaviare' },
+        { id: 17, nombre: 'Huila' },
+        { id: 18, nombre: 'La Guajira' },
+        { id: 19, nombre: 'Magdalena' },
+        { id: 20, nombre: 'Meta' },
+        { id: 21, nombre: 'Nariño' },
+        { id: 22, nombre: 'Norte de Santander' },
+        { id: 23, nombre: 'Putumayo' },
+        { id: 24, nombre: 'Quindío' },
+        { id: 25, nombre: 'Risaralda' },
+        { id: 26, nombre: 'San Andrés y Providencia' },
+        { id: 27, nombre: 'Santander' },
+        { id: 28, nombre: 'Sucre' },
+        { id: 29, nombre: 'Tolima' },
+        { id: 30, nombre: 'Valle del Cauca' },
+        { id: 31, nombre: 'Vaupés' },
+        { id: 32, nombre: 'Vichada' }
+    ];
+
+    const ciudades = [
+        { CiudadID: 1, Nombre: 'Leticia', DepartamentoID: 1 },
+        { CiudadID: 2, Nombre: 'Puerto Nariño', DepartamentoID: 1 },
+        { CiudadID: 3, Nombre: 'Tarapacá', DepartamentoID: 1 },
+        { CiudadID: 4, Nombre: 'La Chorrera', DepartamentoID: 1 },
+        { CiudadID: 5, Nombre: 'Puerto Santander', DepartamentoID: 1 },
+        { CiudadID: 6, Nombre: 'Letuama', DepartamentoID: 1 },
+        { CiudadID: 7, Nombre: 'Puerto Arica', DepartamentoID: 1 },
+        { CiudadID: 8, Nombre: 'Valentín', DepartamentoID: 1 },
+        { CiudadID: 9, Nombre: 'La Pedrera', DepartamentoID: 1 },
+        { CiudadID: 10, Nombre: 'Puerto Alegría', DepartamentoID: 1 },
+        { CiudadID: 11, Nombre: 'Medellín', DepartamentoID: 2 },
+        { CiudadID: 12, Nombre: 'Bello', DepartamentoID: 2 },
+        { CiudadID: 13, Nombre: 'Envigado', DepartamentoID: 2 },
+        { CiudadID: 14, Nombre: 'Itagüí', DepartamentoID: 2 },
+        { CiudadID: 15, Nombre: 'Sabaneta', DepartamentoID: 2 },
+        { CiudadID: 16, Nombre: 'Rionegro', DepartamentoID: 2 },
+        { CiudadID: 17, Nombre: 'La Ceja', DepartamentoID: 2 },
+        { CiudadID: 18, Nombre: 'Caldas', DepartamentoID: 2 },
+        { CiudadID: 19, Nombre: 'Guarne', DepartamentoID: 2 },
+        { CiudadID: 20, Nombre: 'Copacabana', DepartamentoID: 2 },
+        { CiudadID: 21, Nombre: 'Arauca', DepartamentoID: 3 },
+        { CiudadID: 22, Nombre: 'Saravena', DepartamentoID: 3 },
+        { CiudadID: 23, Nombre: 'Tame', DepartamentoID: 3 },
+        { CiudadID: 24, Nombre: 'Fortul', DepartamentoID: 3 },
+        { CiudadID: 25, Nombre: 'Arauquita', DepartamentoID: 3 },
+        { CiudadID: 26, Nombre: 'Cravo Norte', DepartamentoID: 3 },
+        { CiudadID: 27, Nombre: 'Puerto Rondón', DepartamentoID: 3 },
+        { CiudadID: 28, Nombre: 'Saravena', DepartamentoID: 3 },
+        { CiudadID: 29, Nombre: 'Tame', DepartamentoID: 3 },
+        { CiudadID: 30, Nombre: 'Fortul', DepartamentoID: 3 },
+        { CiudadID: 31, Nombre: 'Barranquilla', DepartamentoID: 4 },
+        { CiudadID: 32, Nombre: 'Soledad', DepartamentoID: 4 },
+        { CiudadID: 33, Nombre: 'Malambo', DepartamentoID: 4 },
+        { CiudadID: 34, Nombre: 'Sabanalarga', DepartamentoID: 4 },
+        { CiudadID: 35, Nombre: 'Baranoa', DepartamentoID: 4 },
+        { CiudadID: 36, Nombre: 'Puerto Colombia', DepartamentoID: 4 },
+        { CiudadID: 37, Nombre: 'Santo Tomás', DepartamentoID: 4 },
+        { CiudadID: 38, Nombre: 'Palmar de Varela', DepartamentoID: 4 },
+        { CiudadID: 39, Nombre: 'Galapa', DepartamentoID: 4 },
+        { CiudadID: 40, Nombre: 'Juan de Acosta', DepartamentoID: 4 },
+        { CiudadID: 41, Nombre: 'Cartagena', DepartamentoID: 5 },
+        { CiudadID: 42, Nombre: 'Bolívar', DepartamentoID: 5 },
+        { CiudadID: 43, Nombre: 'Magangué', DepartamentoID: 5 },
+        { CiudadID: 44, Nombre: 'Turbo', DepartamentoID: 5 },
+        { CiudadID: 45, Nombre: 'Mompox', DepartamentoID: 5 },
+        { CiudadID: 46, Nombre: 'Arjona', DepartamentoID: 5 },
+        { CiudadID: 47, Nombre: 'El Carmen de Bolívar', DepartamentoID: 5 },
+        { CiudadID: 48, Nombre: 'San Jacinto', DepartamentoID: 5 },
+        { CiudadID: 49, Nombre: 'Santa Rosa del Sur', DepartamentoID: 5 },
+        { CiudadID: 50, Nombre: 'María La Baja', DepartamentoID: 5 },
+        { CiudadID: 51, Nombre: 'Tunja', DepartamentoID: 6 },
+        { CiudadID: 52, Nombre: 'Duitama', DepartamentoID: 6 },
+        { CiudadID: 53, Nombre: 'Sogamoso', DepartamentoID: 6 },
+        { CiudadID: 54, Nombre: 'Paipa', DepartamentoID: 6 },
+        { CiudadID: 55, Nombre: 'Chiquinquirá', DepartamentoID: 6 },
+        { CiudadID: 56, Nombre: 'Villa de Leyva', DepartamentoID: 6 },
+        { CiudadID: 57, Nombre: 'Soatá', DepartamentoID: 6 },
+        { CiudadID: 58, Nombre: 'Tunja', DepartamentoID: 6 },
+        { CiudadID: 59, Nombre: 'Duitama', DepartamentoID: 6 },
+        { CiudadID: 60, Nombre: 'Sogamoso', DepartamentoID: 6 },
+        { CiudadID: 61, Nombre: 'Manizales', DepartamentoID: 7 },
+        { CiudadID: 62, Nombre: 'La Dorada', DepartamentoID: 7 },
+        { CiudadID: 63, Nombre: 'Chinchiná', DepartamentoID: 7 },
+        { CiudadID: 64, Nombre: 'Villamaría', DepartamentoID: 7 },
+        { CiudadID: 65, Nombre: 'Riosucio', DepartamentoID: 7 },
+        { CiudadID: 66, Nombre: 'Pácora', DepartamentoID: 7 },
+        { CiudadID: 67, Nombre: 'Salamina', DepartamentoID: 7 },
+        { CiudadID: 68, Nombre: 'Anserma', DepartamentoID: 7 },
+        { CiudadID: 69, Nombre: 'Supía', DepartamentoID: 7 },
+        { CiudadID: 70, Nombre: 'Manzanares', DepartamentoID: 7 },
+        { CiudadID: 71, Nombre: 'Florencia', DepartamentoID: 8 },
+        { CiudadID: 72, Nombre: 'San Vicente del Caguán', DepartamentoID: 8 },
+        { CiudadID: 73, Nombre: 'Puerto Rico', DepartamentoID: 8 },
+        { CiudadID: 74, Nombre: 'Valparaíso', DepartamentoID: 8 },
+        { CiudadID: 75, Nombre: 'La Montañita', DepartamentoID: 8 },
+        { CiudadID: 76, Nombre: 'El Doncello', DepartamentoID: 8 },
+        { CiudadID: 77, Nombre: 'Curillo', DepartamentoID: 8 },
+        { CiudadID: 78, Nombre: 'Belén de los Andaquíes', DepartamentoID: 8 },
+        { CiudadID: 79, Nombre: 'Morelia', DepartamentoID: 8 },
+        { CiudadID: 80, Nombre: 'Solano', DepartamentoID: 8 },
+        { CiudadID: 81, Nombre: 'Yopal', DepartamentoID: 9 },
+        { CiudadID: 82, Nombre: 'Aguazul', DepartamentoID: 9 },
+        { CiudadID: 83, Nombre: 'Villanueva', DepartamentoID: 9 },
+        { CiudadID: 84, Nombre: 'Maní', DepartamentoID: 9 },
+        { CiudadID: 85, Nombre: 'Tauramena', DepartamentoID: 9 },
+        { CiudadID: 86, Nombre: 'Paz de Ariporo', DepartamentoID: 9 },
+        { CiudadID: 87, Nombre: 'Monterrey', DepartamentoID: 9 },
+        { CiudadID: 88, Nombre: 'Trinidad', DepartamentoID: 9 },
+        { CiudadID: 89, Nombre: 'Hato Corozal', DepartamentoID: 9 },
+        { CiudadID: 90, Nombre: 'Nunchía', DepartamentoID: 9 },
+        { CiudadID: 91, Nombre: 'Popayán', DepartamentoID: 10 },
+        { CiudadID: 92, Nombre: 'Santander de Quilichao', DepartamentoID: 10 },
+        { CiudadID: 93, Nombre: 'Puerto Tejada', DepartamentoID: 10 },
+        { CiudadID: 94, Nombre: 'Patía', DepartamentoID: 10 },
+        { CiudadID: 95, Nombre: 'Piendamó', DepartamentoID: 10 },
+        { CiudadID: 96, Nombre: 'Cajibío', DepartamentoID: 10 },
+        { CiudadID: 97, Nombre: 'Timbío', DepartamentoID: 10 },
+        { CiudadID: 98, Nombre: 'El Bordo', DepartamentoID: 10 },
+        { CiudadID: 99, Nombre: 'Villa Rica', DepartamentoID: 10 },
+        { CiudadID: 100, Nombre: 'Suárez', DepartamentoID: 10 },
+        { CiudadID: 101, Nombre: 'Valledupar', DepartamentoID: 11 },
+        { CiudadID: 102, Nombre: 'Aguachica', DepartamentoID: 11 },
+        { CiudadID: 103, Nombre: 'La Paz', DepartamentoID: 11 },
+        { CiudadID: 104, Nombre: 'Bosconia', DepartamentoID: 11 },
+        { CiudadID: 105, Nombre: 'Aguachica', DepartamentoID: 11 },
+        { CiudadID: 106, Nombre: 'Pelaya', DepartamentoID: 11 },
+        { CiudadID: 107, Nombre: 'Curumaní', DepartamentoID: 11 },
+        { CiudadID: 108, Nombre: 'González', DepartamentoID: 11 },
+        { CiudadID: 109, Nombre: 'Chiriguaná', DepartamentoID: 11 },
+        { CiudadID: 110, Nombre: 'San Alberto', DepartamentoID: 11 },
+        { CiudadID: 111, Nombre: 'Quibdó', DepartamentoID: 12 },
+        { CiudadID: 112, Nombre: 'Nuquí', DepartamentoID: 12 },
+        { CiudadID: 113, Nombre: 'Istmina', DepartamentoID: 12 },
+        { CiudadID: 114, Nombre: 'Tadó', DepartamentoID: 12 },
+        { CiudadID: 115, Nombre: 'Cértegui', DepartamentoID: 12 },
+        { CiudadID: 116, Nombre: 'Riosucio', DepartamentoID: 12 },
+        { CiudadID: 117, Nombre: 'Bahía Solano', DepartamentoID: 12 },
+        { CiudadID: 118, Nombre: 'El Carmen de Atrato', DepartamentoID: 12 },
+        { CiudadID: 119, Nombre: 'Unión Panamericana', DepartamentoID: 12 },
+        { CiudadID: 120, Nombre: 'Condoto', DepartamentoID: 12 },
+        { CiudadID: 121, Nombre: 'Montería', DepartamentoID: 13 },
+        { CiudadID: 122, Nombre: 'Sahagún', DepartamentoID: 13 },
+        { CiudadID: 123, Nombre: 'Tierralta', DepartamentoID: 13 },
+        { CiudadID: 124, Nombre: 'Lorica', DepartamentoID: 13 },
+        { CiudadID: 125, Nombre: 'Planeta Rica', DepartamentoID: 13 },
+        { CiudadID: 126, Nombre: 'Montelíbano', DepartamentoID: 13 },
+        { CiudadID: 127, Nombre: 'Chinú', DepartamentoID: 13 },
+        { CiudadID: 128, Nombre: 'San Bernardo del Viento', DepartamentoID: 13 },
+        { CiudadID: 129, Nombre: 'Cotorra', DepartamentoID: 13 },
+        { CiudadID: 130, Nombre: 'Ayapel', DepartamentoID: 13 },
+        { CiudadID: 131, Nombre: 'Bogotá', DepartamentoID: 14 },
+        { CiudadID: 132, Nombre: 'Soacha', DepartamentoID: 14 },
+        { CiudadID: 133, Nombre: 'Zipaquirá', DepartamentoID: 14 },
+        { CiudadID: 134, Nombre: 'Chía', DepartamentoID: 14 },
+        { CiudadID: 135, Nombre: 'Facatativá', DepartamentoID: 14 },
+        { CiudadID: 136, Nombre: 'Girardot', DepartamentoID: 14 },
+        { CiudadID: 137, Nombre: 'Funza', DepartamentoID: 14 },
+        { CiudadID: 138, Nombre: 'Cajicá', DepartamentoID: 14 },
+        { CiudadID: 139, Nombre: 'Madrid', DepartamentoID: 14 },
+        { CiudadID: 140, Nombre: 'Sibaté', DepartamentoID: 14 },
+        { CiudadID: 141, Nombre: 'Puerto Inírida', DepartamentoID: 15 },
+        { CiudadID: 142, Nombre: 'San Felipe', DepartamentoID: 15 },
+        { CiudadID: 143, Nombre: 'La Guadalupe', DepartamentoID: 15 },
+        { CiudadID: 144, Nombre: 'Cumaribo', DepartamentoID: 15 },
+        { CiudadID: 145, Nombre: 'Barranco Minas', DepartamentoID: 15 },
+        { CiudadID: 146, Nombre: 'Morichal', DepartamentoID: 15 },
+        { CiudadID: 147, Nombre: 'Pana Pana', DepartamentoID: 15 },
+        { CiudadID: 148, Nombre: 'Mapiripán', DepartamentoID: 15 },
+        { CiudadID: 149, Nombre: 'La Primavera', DepartamentoID: 15 },
+        { CiudadID: 150, Nombre: 'Puerto Colombia', DepartamentoID: 15 },
+        { CiudadID: 151, Nombre: 'San José del Guaviare', DepartamentoID: 16 },
+        { CiudadID: 152, Nombre: 'Calamar', DepartamentoID: 16 },
+        { CiudadID: 153, Nombre: 'El Retorno', DepartamentoID: 16 },
+        { CiudadID: 154, Nombre: 'Miraflores', DepartamentoID: 16 },
+        { CiudadID: 155, Nombre: 'San José del Guaviare', DepartamentoID: 16 },
+        { CiudadID: 156, Nombre: 'Calamar', DepartamentoID: 16 },
+        { CiudadID: 157, Nombre: 'El Retorno', DepartamentoID: 16 },
+        { CiudadID: 158, Nombre: 'Miraflores', DepartamentoID: 16 },
+        { CiudadID: 159, Nombre: 'Carimagua', DepartamentoID: 16 },
+        { CiudadID: 160, Nombre: 'Barrancominas', DepartamentoID: 16 },
+        { CiudadID: 161, Nombre: 'Neiva', DepartamentoID: 17 },
+        { CiudadID: 162, Nombre: 'Pitalito', DepartamentoID: 17 },
+        { CiudadID: 163, Nombre: 'Garzón', DepartamentoID: 17 },
+        { CiudadID: 164, Nombre: 'Campoalegre', DepartamentoID: 17 },
+        { CiudadID: 165, Nombre: 'La Plata', DepartamentoID: 17 },
+        { CiudadID: 166, Nombre: 'Rivera', DepartamentoID: 17 },
+        { CiudadID: 167, Nombre: 'Tarqui', DepartamentoID: 17 },
+        { CiudadID: 168, Nombre: 'El Pital', DepartamentoID: 17 },
+        { CiudadID: 169, Nombre: 'Nátaga', DepartamentoID: 17 },
+        { CiudadID: 170, Nombre: 'Suaza', DepartamentoID: 17 },
+        { CiudadID: 171, Nombre: 'Riohacha', DepartamentoID: 18 },
+        { CiudadID: 172, Nombre: 'Maicao', DepartamentoID: 18 },
+        { CiudadID: 173, Nombre: 'Uribia', DepartamentoID: 18 },
+        { CiudadID: 174, Nombre: 'Fonseca', DepartamentoID: 18 },
+        { CiudadID: 175, Nombre: 'Barrancas', DepartamentoID: 18 },
+        { CiudadID: 176, Nombre: 'Manaure', DepartamentoID: 18 },
+        { CiudadID: 177, Nombre: 'San Juan del Cesar', DepartamentoID: 18 },
+        { CiudadID: 178, Nombre: 'Distracción', DepartamentoID: 18 },
+        { CiudadID: 179, Nombre: 'Hatonuevo', DepartamentoID: 18 },
+        { CiudadID: 180, Nombre: 'Albania', DepartamentoID: 18 },
+        { CiudadID: 180, Nombre: 'Albania', DepartamentoID: 18 },
+        { CiudadID: 181, Nombre: 'Santa Marta', DepartamentoID: 19 },
+        { CiudadID: 182, Nombre: 'Ciénaga', DepartamentoID: 19 },
+        { CiudadID: 183, Nombre: 'Fundación', DepartamentoID: 19 },
+        { CiudadID: 184, Nombre: 'Aracataca', DepartamentoID: 19 },
+        { CiudadID: 185, Nombre: 'Puebloviejo', DepartamentoID: 19 },
+        { CiudadID: 186, Nombre: 'Zona Bananera', DepartamentoID: 19 },
+        { CiudadID: 187, Nombre: 'El Banco', DepartamentoID: 19 },
+        { CiudadID: 188, Nombre: 'Plato', DepartamentoID: 19 },
+        { CiudadID: 189, Nombre: 'El Retén', DepartamentoID: 19 },
+        { CiudadID: 190, Nombre: 'Guamal', DepartamentoID: 19 },
+        { CiudadID: 191, Nombre: 'Villavicencio', DepartamentoID: 20 },
+        { CiudadID: 192, Nombre: 'Acacías', DepartamentoID: 20 },
+        { CiudadID: 193, Nombre: 'Granada', DepartamentoID: 20 },
+        { CiudadID: 194, Nombre: 'Puerto López', DepartamentoID: 20 },
+        { CiudadID: 195, Nombre: 'San Juanito', DepartamentoID: 20 },
+        { CiudadID: 196, Nombre: 'La Macarena', DepartamentoID: 20 },
+        { CiudadID: 197, Nombre: 'San Martín', DepartamentoID: 20 },
+        { CiudadID: 198, Nombre: 'Cubarral', DepartamentoID: 20 },
+        { CiudadID: 199, Nombre: 'Castilla la Nueva', DepartamentoID: 20 },
+        { CiudadID: 200, Nombre: 'Restrepo', DepartamentoID: 20 },
+        { CiudadID: 201, Nombre: 'Pasto', DepartamentoID: 21 },
+        { CiudadID: 202, Nombre: 'Ipiales', DepartamentoID: 21 },
+        { CiudadID: 203, Nombre: 'Tumaco', DepartamentoID: 21 },
+        { CiudadID: 204, Nombre: 'Túquerres', DepartamentoID: 21 },
+        { CiudadID: 205, Nombre: 'El Charco', DepartamentoID: 21 },
+        { CiudadID: 206, Nombre: 'La Unión', DepartamentoID: 21 },
+        { CiudadID: 207, Nombre: 'Samaniego', DepartamentoID: 21 },
+        { CiudadID: 208, Nombre: 'Colón', DepartamentoID: 21 },
+        { CiudadID: 209, Nombre: 'Arboleda', DepartamentoID: 21 },
+        { CiudadID: 210, Nombre: 'Sandoná', DepartamentoID: 21 },
+        { CiudadID: 211, Nombre: 'Cúcuta', DepartamentoID: 22 },
+        { CiudadID: 212, Nombre: 'Ocaña', DepartamentoID: 22 },
+        { CiudadID: 213, Nombre: 'Pamplona', DepartamentoID: 22 },
+        { CiudadID: 214, Nombre: 'Villa del Rosario', DepartamentoID: 22 },
+        { CiudadID: 215, Nombre: 'Los Patios', DepartamentoID: 22 },
+        { CiudadID: 216, Nombre: 'Cúcuta', DepartamentoID: 22 },
+        { CiudadID: 217, Nombre: 'Ocaña', DepartamentoID: 22 },
+        { CiudadID: 218, Nombre: 'Pamplona', DepartamentoID: 22 },
+        { CiudadID: 219, Nombre: 'Villa del Rosario', DepartamentoID: 22 },
+        { CiudadID: 220, Nombre: 'Los Patios', DepartamentoID: 22 },
+        { CiudadID: 221, Nombre: 'Mocoa', DepartamentoID: 23 },
+        { CiudadID: 222, Nombre: 'Puerto Asís', DepartamentoID: 23 },
+        { CiudadID: 223, Nombre: 'Sibundoy', DepartamentoID: 23 },
+        { CiudadID: 224, Nombre: 'Colón', DepartamentoID: 23 },
+        { CiudadID: 225, Nombre: 'Villagarzón', DepartamentoID: 23 },
+        { CiudadID: 226, Nombre: 'Orito', DepartamentoID: 23 },
+        { CiudadID: 227, Nombre: 'San Miguel', DepartamentoID: 23 },
+        { CiudadID: 228, Nombre: 'Santiago', DepartamentoID: 23 },
+        { CiudadID: 229, Nombre: 'Valle del Guamuez', DepartamentoID: 23 },
+        { CiudadID: 230, Nombre: 'La Hormiga', DepartamentoID: 23 },
+        { CiudadID: 231, Nombre: 'Armenia', DepartamentoID: 24 },
+        { CiudadID: 232, Nombre: 'Calarcá', DepartamentoID: 24 },
+        { CiudadID: 233, Nombre: 'Montenegro', DepartamentoID: 24 },
+        { CiudadID: 234, Nombre: 'La Tebaida', DepartamentoID: 24 },
+        { CiudadID: 235, Nombre: 'Quimbaya', DepartamentoID: 24 },
+        { CiudadID: 236, Nombre: 'Salento', DepartamentoID: 24 },
+        { CiudadID: 237, Nombre: 'Circasia', DepartamentoID: 24 },
+        { CiudadID: 238, Nombre: 'Filandia', DepartamentoID: 24 },
+        { CiudadID: 239, Nombre: 'Buenavista', DepartamentoID: 24 },
+        { CiudadID: 240, Nombre: 'Pijao', DepartamentoID: 24 },
+        { CiudadID: 241, Nombre: 'Pereira', DepartamentoID: 25 },
+        { CiudadID: 242, Nombre: 'Dosquebradas', DepartamentoID: 25 },
+        { CiudadID: 243, Nombre: 'Santa Rosa de Cabal', DepartamentoID: 25 },
+        { CiudadID: 244, Nombre: 'La Virginia', DepartamentoID: 25 },
+        { CiudadID: 245, Nombre: 'Santuario', DepartamentoID: 25 },
+        { CiudadID: 246, Nombre: 'Marsella', DepartamentoID: 25 },
+        { CiudadID: 247, Nombre: 'Belén de Umbría', DepartamentoID: 25 },
+        { CiudadID: 248, Nombre: 'Quinchía', DepartamentoID: 25 },
+        { CiudadID: 249, Nombre: 'Apía', DepartamentoID: 25 },
+        { CiudadID: 250, Nombre: 'La Celia', DepartamentoID: 25 },
+        { CiudadID: 251, Nombre: 'San Andrés', DepartamentoID: 26 },
+        { CiudadID: 252, Nombre: 'Providencia', DepartamentoID: 26 },
+        { CiudadID: 253, Nombre: 'Santa Catalina', DepartamentoID: 26 },
+        { CiudadID: 254, Nombre: 'San Andrés', DepartamentoID: 26 },
+        { CiudadID: 255, Nombre: 'Providencia', DepartamentoID: 26 },
+        { CiudadID: 256, Nombre: 'Santa Catalina', DepartamentoID: 26 },
+        { CiudadID: 257, Nombre: 'San Andrés', DepartamentoID: 26 },
+        { CiudadID: 258, Nombre: 'Providencia', DepartamentoID: 26 },
+        { CiudadID: 259, Nombre: 'Santa Catalina', DepartamentoID: 26 },
+        { CiudadID: 260, Nombre: 'San Andrés', DepartamentoID: 26 },
+        { CiudadID: 261, Nombre: 'San Andrés', DepartamentoID: 26 },
+        { CiudadID: 262, Nombre: 'Providencia', DepartamentoID: 26 },
+        { CiudadID: 263, Nombre: 'Santa Catalina', DepartamentoID: 26 },
+        { CiudadID: 264, Nombre: 'San Andrés', DepartamentoID: 26 },
+        { CiudadID: 265, Nombre: 'Providencia', DepartamentoID: 26 },
+        { CiudadID: 266, Nombre: 'Santa Catalina', DepartamentoID: 26 },
+        { CiudadID: 267, Nombre: 'San Andrés', DepartamentoID: 26 },
+        { CiudadID: 268, Nombre: 'Providencia', DepartamentoID: 26 },
+        { CiudadID: 269, Nombre: 'Santa Catalina', DepartamentoID: 26 },
+        { CiudadID: 270, Nombre: 'San Andrés', DepartamentoID: 26 },
+        { CiudadID: 271, Nombre: 'Bucaramanga', DepartamentoID: 27 },
+        { CiudadID: 272, Nombre: 'Girón', DepartamentoID: 27 },
+        { CiudadID: 273, Nombre: 'Floridablanca', DepartamentoID: 27 },
+        { CiudadID: 274, Nombre: 'Piedecuesta', DepartamentoID: 27 },
+        { CiudadID: 275, Nombre: 'Barrancabermeja', DepartamentoID: 27 },
+        { CiudadID: 276, Nombre: 'Bucaramanga', DepartamentoID: 27 },
+        { CiudadID: 277, Nombre: 'Girón', DepartamentoID: 27 },
+        { CiudadID: 278, Nombre: 'Floridablanca', DepartamentoID: 27 },
+        { CiudadID: 279, Nombre: 'Piedecuesta', DepartamentoID: 27 },
+        { CiudadID: 280, Nombre: 'Barrancabermeja', DepartamentoID: 27 },
+        { CiudadID: 281, Nombre: 'Sincelejo', DepartamentoID: 28 },
+        { CiudadID: 282, Nombre: 'Corozal', DepartamentoID: 28 },
+        { CiudadID: 283, Nombre: 'San Marcos', DepartamentoID: 28 },
+        { CiudadID: 284, Nombre: 'Sampués', DepartamentoID: 28 },
+        { CiudadID: 285, Nombre: 'Tolú', DepartamentoID: 28 },
+        { CiudadID: 286, Nombre: 'Sincelejo', DepartamentoID: 28 },
+        { CiudadID: 287, Nombre: 'Corozal', DepartamentoID: 28 },
+        { CiudadID: 288, Nombre: 'San Marcos', DepartamentoID: 28 },
+        { CiudadID: 289, Nombre: 'Sampués', DepartamentoID: 28 },
+        { CiudadID: 290, Nombre: 'Tolú', DepartamentoID: 28 },
+        { CiudadID: 291, Nombre: 'Ibagué', DepartamentoID: 29 },
+        { CiudadID: 292, Nombre: 'Espinal', DepartamentoID: 29 },
+        { CiudadID: 293, Nombre: 'Melgar', DepartamentoID: 29 },
+        { CiudadID: 294, Nombre: 'Mariquita', DepartamentoID: 29 },
+        { CiudadID: 295, Nombre: 'Chaparral', DepartamentoID: 29 },
+        { CiudadID: 296, Nombre: 'Ibagué', DepartamentoID: 29 },
+        { CiudadID: 297, Nombre: 'Espinal', DepartamentoID: 29 },
+        { CiudadID: 298, Nombre: 'Melgar', DepartamentoID: 29 },
+        { CiudadID: 299, Nombre: 'Mariquita', DepartamentoID: 29 },
+        { CiudadID: 300, Nombre: 'Chaparral', DepartamentoID: 29 },
+        { CiudadID: 301, Nombre: 'Cali', DepartamentoID: 30 },
+        { CiudadID: 302, Nombre: 'Buenaventura', DepartamentoID: 30 },
+        { CiudadID: 303, Nombre: 'Palmira', DepartamentoID: 30 },
+        { CiudadID: 304, Nombre: 'Tuluá', DepartamentoID: 30 },
+        { CiudadID: 305, Nombre: 'Yumbo', DepartamentoID: 30 },
+        { CiudadID: 306, Nombre: 'Cali', DepartamentoID: 30 },
+        { CiudadID: 307, Nombre: 'Buenaventura', DepartamentoID: 30 },
+        { CiudadID: 308, Nombre: 'Palmira', DepartamentoID: 30 },
+        { CiudadID: 309, Nombre: 'Tuluá', DepartamentoID: 30 },
+        { CiudadID: 310, Nombre: 'Yumbo', DepartamentoID: 30 },
+        { CiudadID: 311, Nombre: 'Mitú', DepartamentoID: 31 },
+        { CiudadID: 312, Nombre: 'Carurú', DepartamentoID: 31 },
+        { CiudadID: 313, Nombre: 'Taraira', DepartamentoID: 31 },
+        { CiudadID: 314, Nombre: 'Pacoa', DepartamentoID: 31 },
+        { CiudadID: 315, Nombre: 'Papunahua', DepartamentoID: 31 },
+        { CiudadID: 316, Nombre: 'Mitú', DepartamentoID: 31 },
+        { CiudadID: 317, Nombre: 'Carurú', DepartamentoID: 31 },
+        { CiudadID: 318, Nombre: 'Taraira', DepartamentoID: 31 },
+        { CiudadID: 319, Nombre: 'Pacoa', DepartamentoID: 31 },
+        { CiudadID: 320, Nombre: 'Papunahua', DepartamentoID: 31 },
+        { CiudadID: 321, Nombre: 'Puerto Carreño', DepartamentoID: 32 },
+        { CiudadID: 322, Nombre: 'La Primavera', DepartamentoID: 32 },
+        { CiudadID: 323, Nombre: 'Santa Rosalía', DepartamentoID: 32 },
+        { CiudadID: 324, Nombre: 'Cumaribo', DepartamentoID: 32 },
+        { CiudadID: 325, Nombre: 'Puerto Carreño', DepartamentoID: 32 },
+        { CiudadID: 326, Nombre: 'La Primavera', DepartamentoID: 32 },
+        { CiudadID: 327, Nombre: 'Santa Rosalía', DepartamentoID: 32 },
+        { CiudadID: 328, Nombre: 'Cumaribo', DepartamentoID: 32 },
+        { CiudadID: 329, Nombre: 'San José de Ocune', DepartamentoID: 32 },
+        { CiudadID: 330, Nombre: 'La Guafilla', DepartamentoID: 32 },
+    ];
+
+    // Función para cargar las ciudades basadas en el departamento seleccionado
+    function cargarCiudades() {
+        const departamentoSelect = document.getElementById('departamento');
+        const ciudadSelect = document.getElementById('ciudad');
+        const selectedDepartamentoId = parseInt(departamentoSelect.value);
+
+        // Clear previous cities
+        ciudadSelect.innerHTML = '<option value="">Selecciona una ciudad</option>';
+
+        // Filter cities based on the selected department
+        const filteredCiudades = ciudades.filter(
+            ciudad => ciudad.DepartamentoID === selectedDepartamentoId
+        );
+
+        // Populate the cities dropdown
+        filteredCiudades.forEach(ciudad => {
+            const option = document.createElement('option');
+            option.value = ciudad.CiudadID;
+            option.textContent = ciudad.Nombre;
+            ciudadSelect.appendChild(option);
+        });
+    }
+
+    // Event listener para detectar el cambio en la selección del departamento
+    document.getElementById('departamento').addEventListener('change', cargarCiudades);
+
+    // Cargar las opciones del departamento al cargar la página
+    window.onload = function () {
+        const departamentoSelect = document.getElementById('departamento');
+
+        departamentos.forEach(departamento => {
+            const option = document.createElement('option');
+            option.value = departamento.id;
+            option.textContent = departamento.nombre;
+            departamentoSelect.appendChild(option);
+        });
+    };
+
+</script>
 
 </html>
