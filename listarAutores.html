@@ -3,12 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Listado de Lectores</title>
+    <title>Listado de Autores</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-    <h1>Listado de Lectores</h1>
+    <h1>Listado de Autores</h1>
 
     <label for="busqueda">Buscar en todos los campos:</label>
     <input type="text" id="busqueda">
@@ -16,19 +16,15 @@
     <table id="tablaResultados">
         <thead>
             <tr>
-                <th>Cédula</th>
+                <th>ID de Autor</th>
                 <th>Primer Nombre</th>
                 <th>Segundo Nombre</th>
                 <th>Primer Apellido</th>
                 <th>Segundo Apellido</th>
+                <th>ID de País de Nacionalidad</th>
                 <th>Fecha de Nacimiento</th>
-                <th>Departamento ID</th>
-                <th>Ciudad ID</th>
-                <th>Calle</th>
-                <th>Número de Casa</th>
-                <th>Barrio</th>
-                <th>Número de Teléfono</th>
-                <th>Correo</th>
+                <th>Fecha de Fallecimiento</th>
+                <th>Biografía</th>
                 <!-- Puedes agregar más encabezados según tus columnas -->
             </tr>
         </thead>
@@ -41,13 +37,11 @@
         $(document).ready(function () {
             $('#busqueda').on('input', function () {
                 const searchTerm = $(this).val();
-                console.log(searchTerm);
-                $.post('php/Listalectores_PKG.php',
-                    {
-                        busqueda: searchTerm
-                    }, function (data) {
-                        mostrarResultados(data);
-                    });
+                $.post('php/ListarAutores_PKG.php', {
+                    busqueda: searchTerm
+                }, function (data) {
+                    mostrarResultados(data);
+                });
             });
         });
 
@@ -57,24 +51,19 @@
 
             // Iterar sobre los resultados y mostrarlos en la tabla
             $.each(data, function (index, item) {
-           
                 tabla.append(
                     `<tr>
-            <td>${item.Cedula}</td>
-            <td>${item.PrimerNombre}</td>
-            <td>${item.SegundoNombre}</td>
-            <td>${item.PrimerApellido}</td>
-            <td>${item.SegundoApellido}</td>
-            <td>${item.FechaNacimiento}</td>
-            <td>${item.DepartamentoID}</td>
-            <td>${item.CiudadID}</td>
-            <td>${item.Calle}</td>
-            <td>${item.NumeroCasa}</td>
-            <td>${item.Barrio}</td>
-            <td>${item.NumeroTelefono}</td>
-            <td>${item.Correo}</td>
-            <!-- Agrega aquí más celdas según tus columnas -->
-          </tr>`
+                        <td>${item.AutorID}</td>
+                        <td>${item.PrimerNombre}</td>
+                        <td>${item.SegundoNombre}</td>
+                        <td>${item.PrimerApellido}</td>
+                        <td>${item.SegundoApellido}</td>
+                        <td>${item.NacionalidadPaisID}</td>
+                        <td>${item.FechaNacimiento}</td>
+                        <td>${item.FechaFallecimiento}</td>
+                        <td>${item.Biografia}</td>
+                        <!-- Agrega aquí más celdas según tus columnas -->
+                    </tr>`
                 );
             });
         }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/ProcesarPrestamo.css">
+    <link rel="stylesheet" type="text/css" href="styles/Gestion.css">
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Procesar préstamo</title>
+</head>
+<script src="js/script.js"></script>
+
+<body>
+    <header>
+        <h1><a href="index.html">Biblioteca Nocturna de las Nubes</a></h1>
+        <div class="icomenu">
+            <img src="assets/iconos/barra-de-menus.png" alt="" id="iconmenu">
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="listarLectore.html">Usuarios</a></li>
+                <li><a href="listarLibros.html">Libros</a></li>
+                <li><a href="listarPrestamos.html">Prestamos</a></li>
+                <li><a href="listarAutores.html">Autores</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="contenedorRegistar">
+        <section class="Gestion">
+            <section id="procesarPrestamo">
+                <div id="sectionprestamoForm">
+                    <form id="prestamoForm">
+                        <label for="copia_id">Copia ID:</label>
+                        <input type="number" name="copia_id" required><br>
+
+                        <label for="cedula">Usuario ID:</label>
+                        <input type="text" name="cedula" required><br>
+
+                        <input type="submit" value="Realizar Préstamo">
+                    </form>
+                </div>
+                <div id="resultado"></div>
+            </section>
+        </section>
+        <section id="mitad2">
+            <img src="assets/inicioRegistro/cliente.jpg" alt="">
+        </section>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/ProcesarPrestamo.css">
+    <link rel="stylesheet" type="text/css" href="styles/Gestion.css">
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Procesar Devolución</title>
+</head>
+
+<body>
+    <header>
+        <h1><a href="index.html">Biblioteca Nocturna de las Nubes</a></h1>
+        <div class="icomenu">
+            <img src="assets/iconos/barra-de-menus.png" alt="" id="iconmenu">
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="listarLectore.html">Usuarios</a></li>
+                <li><a href="listarLibros.html">Libros</a></li>
+                <li><a href="listarPrestamos.html">Prestamos</a></li>
+                <li><a href="listarAutores.html">Autores</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="contenedorRegistar">
+        <section class="Gestion">
+            <h1>Formulario de Devolución de Libro</h1>
+            <form id="devolucionForm">
+                <label for="prestamo_id">ID de Préstamo:</label>
+                <input type="text" id="prestamo_id" name="prestamo_id" required>
+                <br>
+                <button type="submit">Devolver Libro</button>
+            </form>
+        </section>
+        <section id="mitad2">
+            <img src="assets/inicioRegistro/cliente.jpg" alt="">
+        </section>
+    </div>
+
+
+</body>
+<script>
+    //Función para procesar devolución del pestamo
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById("devolucionForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+            fetch("php/procesar_devulucion.php", {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                })
+                .catch(error => {
+                    console.error("Error en la solicitud: " + error);
+                });
+        });
+    });
+</script>
+
+</html>

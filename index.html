@@ -12,15 +12,19 @@
     <title>Biblioteca Nocturna de las Nubest</title>
 </head>
 
+
 <body>
     <header>
-        <h1>Biblioteca Nocturna de las Nubes</h1>
+        <h1><a href="index.html">Biblioteca Nocturna de las Nubes</a></h1>
+        <div class="icomenu">
+            <img src="assets/iconos/barra-de-menus.png" alt="" id="iconmenu">
+        </div>
         <nav class="menu">
             <ul>
-                <li>Usuarios</li>
-                <li>Libros</li>
-                <li>Prestamos</li>
-                <li>Autores</li>
+                <li><a href="listarLectore.html">Usuarios</a></li>
+                <li><a href="listarLibros.html">Libros</a></li>
+                <li><a href="listarPrestamos.html">Prestamos</a></li>
+                <li><a href="listarAutores.html">Autores</a></li>
             </ul>
         </nav>
     </header>
@@ -28,98 +32,32 @@
         <div class="cards">
             <div class="card">
                 <img src="assets/inicioRegistro/cliente.jpg" alt="Registrar Cliente">
-                <h2>Registrar Cliente</h2>
-                <button class="btn" onclick="location.href='registro_cliente.html'">Registrar</button>
+                <h2>Gestion Cliente</h2>
+                <button class="btn" onclick="location.href='GestionLector.html'">Gestionar</button>
             </div>
             <div class="card">
                 <img src="assets/inicioRegistro/autor.jpg" alt="Registrar Autor">
-                <h2>Registrar Autor</h2>
-                <button class="btn" onclick="location.href='registro_autor.html'">Registrar</button>
+                <h2>Gestion Autor</h2>
+                <button class="btn" onclick="location.href='Gestiónautores.html'">Gestionar</button>
             </div>
             <div class="card">
                 <img src="assets/inicioRegistro/Libro.jpg" alt="Registrar Libro">
-                <h2>Registrar Libro</h2>
-                <button class="btn" onclick="location.href='registro_libro.html'">Registrar</button>
+                <h2>Gestion Libro</h2>
+                <button class="btn" onclick="location.href='registro_libro.html'">Gestionar</button>
             </div>
             <div class="card">
                 <img src="assets/inicioRegistro/prestamo.jpg" alt="Registrar Prestamo">
-                <h2>Registrar Prestamo</h2>
-                <button class="btn" onclick="location.href='registro_prestamo.html'">Registrar</button>
+                <h2>Gestion Prestamo</h2>
+                <button class="btn" onclick="location.href='ProcesarPrestamo.html'">Procesar</button>
             </div>
             <div class="card">
                 <img src="assets/inicioRegistro/prestamo.jpg" alt="Registrar Prestamo">
                 <h2>Devulucion de Prestamo</h2>
-                <button class="btn" onclick="location.href='devolucionLibro.html'">Registrar</button>
+                <button class="btn" onclick="location.href='ProcesarDevulucion.html'">Registrar</button>
             </div>
         </div>
     </div>
-    <section id="procesarPrestamo">
-        <div id="sectionprestamoForm">
-            <form id="prestamoForm">
-                <label for="copia_id">Copia ID:</label>
-                <input type="number" name="copia_id" required><br>
-
-                <label for="cedula">Usuario ID:</label>
-                <input type="text" name="cedula" required><br>
-
-                <input type="submit" value="Realizar Préstamo">
-            </form>
-        </div>
-        <div id="resultado"></div>
-    </section>
+    <script src="js/script.js"></script>
 </body>
-
-<script>
-
-    document.getElementById("prestamoForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const copiaId = document.querySelector("input[name='copia_id']").value;
-        const cedula = document.querySelector("input[name='cedula']").value;
-
-        fetch('php/procesar_prestamoPaquete.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `copia_id=${copiaId}&cedula=${cedula}`
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) {
-                    alert(`Error: ${data.error}`);
-                } else {
-                    const facturaHTML = `
-                <div id="factura">
-                    <div class="encabezado">Biblioteca Nocturna de las Nubes</div>
-                    <div class="detalle">Referencia de préstamo: ${data.referencia_prestamo}</div>
-                    <div class="detalle">Fecha de préstamo: ${data.fecha_prestamo}</div>
-                    <div class="detalle">Fecha de entrega: ${data.fecha_entrega}</div>
-                    <div class="detalle">Libro prestado: ${data.libro_prestado}</div>
-                    <div class="detalle">Autor del libro: ${data.autor_libro}</div>
-                    <div class="detalle">Nombre del lector: ${data.nombre_lector}</div>
-                    <div class="detalle">Cédula del lector: ${data.cedula_lector}</div>
-                    <div class="pie-pagina">Gracias por su préstamo</div>
-                    <br>
-                    <button id="boton-imprimir"  onclick="imprimirRecibo()" >Imprimir factura</button>
-                    <br>
-                </div>`;
-                    document.getElementById("resultado").innerHTML = facturaHTML;
-                }
-                console.log('Data:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error en la solicitud: ' + error.message);
-            });
-    });
-
-
-</script>
 
 </html>

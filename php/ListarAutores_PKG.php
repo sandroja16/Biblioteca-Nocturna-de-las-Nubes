@@ -9,7 +9,7 @@ if (isset($_POST['busqueda'])) {
     if ($conexion) {
         // Preparar la llamada a la función FN_ListarLectores del paquete GESTION_LECTORES_PKG
         $query = "BEGIN
-                    :result := GESTION_LECTORES_PKG.FN_ListarLectores(:pBusqueda);
+                    :result := GESTION_AUTORES_PKG.FN_ListarAutores(:pBusqueda);
                   END;";
 
         // Preparar el statement

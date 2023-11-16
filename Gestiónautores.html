@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/ProcesarPrestamo.css">
+    <link rel="stylesheet" type="text/css" href="styles/Gestion.css">
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Gestion de Autores</title>
+</head>
+
+<body>
+    <header>
+        <h1><a href="index.html">Biblioteca Nocturna de las Nubes</a></h1>
+        <div class="icomenu">
+            <img src="assets/iconos/barra-de-menus.png" alt="" id="iconmenu">
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="listarLectore.html">Usuarios</a></li>
+                <li><a href="listarLibros.html">Libros</a></li>
+                <li><a href="listarPrestamos.html">Prestamos</a></li>
+                <li><a href="listarAutores.html">Autores</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="contenedorRegistar">
+        <section class="Gestion">
+            <h1>Gestion de Autores</h1>
+            <form id="registroForm">
+                <label for="autorID">ID de Autor:</label>
+                <input type="text" name="autorID" id="autorID" required><br>
+
+                <label for="primerNombre">Primer Nombre:</label>
+                <input type="text" name="primerNombre" id="primerNombre" required><br>
+
+                <label for="segundoNombre">Segundo Nombre:</label>
+                <input type="text" name="segundoNombre" id="segundoNombre"><br>
+
+                <label for="primerApellido">Primer Apellido:</label>
+                <input type="text" name="primerApellido" id="primerApellido" required><br>
+
+                <label for="segundoApellido">Segundo Apellido:</label>
+                <input type="text" name="segundoApellido" id="segundoApellido"><br>
+
+                <label for="nacionalidad">Nacionalidad:</label>
+                <select name="nacionalidad" id="nacionalidad" required>
+                    <option value="">Selecciona una nacionalidad</option>
+                    <!-- Opciones generadas dinámicamente -->
+                    <!-- Ejemplo: <option value="1">País 1</option> -->
+                </select><br>
+
+                <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                <input type="date" name="fechaNacimiento" id="fechaNacimiento" required><br>
+
+                <label for="fechaFallecimiento">Fecha de Fallecimiento:</label>
+                <input type="date" name="fechaFallecimiento" id="fechaFallecimiento"><br>
+
+                <label for="biografia">Biografía:</label>
+                <textarea name="biografia" id="biografia" rows="4" cols="50" required></textarea><br>
+
+                <input type="submit" value="Registrar">
+                <button type="button" id="btnActualizar">Actualizar</button>
+                <button type="button" id="btnBuscar">Buscar</button>
+            </form>
+
+        </section>
+        <section id="mitad2">
+            <img src="assets/inicioRegistro/autor.jpg" alt="">
+        </section>
+    </div>
+
+    <script>
+        // Aquí puedes agregar el código JavaScript similar al formulario de lectores para el registro, actualización y búsqueda de autores.
+        // Puedes emplear las mismas funciones cambiando los nombres de los campos y las URLs de las peticiones al servidor.
+        // Asegúrate de tener las rutas correctas para la lógica del lado del servidor.
+    </script>
+</body>
+
+</html>
